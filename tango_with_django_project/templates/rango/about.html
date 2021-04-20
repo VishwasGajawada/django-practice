@@ -1,0 +1,15 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Rango- About
+{% endblock  %}
+
+{% block body_block %}
+    <img src="{%static "images/rango.jpg" %}" alt="" style="width: 200px;">
+    <h1>This tutorial has been put together by {{myname}}</h1><br>
+    <p>Visits : {{visits}}</p>
+    <p>Here is a cat</p><br>
+    <img src="{{ MEDIA_URL }}cat.jpeg" alt="A cat picture">
+{% endblock  %}
+

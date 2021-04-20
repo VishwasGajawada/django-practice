@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <h1>Users for AppTwo : </h1>
+    {% if users %}
+        <ol>
+            {% for user in users %}
+                <li>User Info:</li>
+                <ul>
+                    <li>First Name : {{user.first_name}}</li>
+                    <li>Last Name : {{user.last_name}}</li>
+                    <li>email : {{user.email}}</li>
+                </ul>
+            {% endfor %}
+        </ol>
+    {% endif %}
+</body>
+</html>

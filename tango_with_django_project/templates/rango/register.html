@@ -1,0 +1,16 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Register
+{% endblock  %}
+
+{% block body_block %}
+    <h1>Register for Rango</h1>
+    {% if registered %}
+        Rango says : <strong>Thank you for registering</strong>
+        <a href="{%url 'index'%}">Homepage</a>
+    {% else %}
+        
+    {% endif %}
+{% endblock  %}
