@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends 'tasks/base.html' %}
+{% load static %}
 
 {% block block_title %}
 	{% if user.is_authenticated %}
@@ -8,120 +9,88 @@
 	{% endif %}
 {% endblock block_title %}
 
-<body>
-	{% block body_block %}
-		<div class="center-column">
-			<h4>Add Task</h4>
-			<form action="/" method="POST">
-				{% csrf_token %}
-				{{form.title}}
-				<input class="btn btn-info" type="submit" name="Create Task" value="Submit">
-			</form>
 
-		</div>
+{% block body_block %}
+	<div class="center-column">
+		<h4>Add Task</h4>
+		<form action="/" method="POST">
+			{% csrf_token %}
+			{{form.title}}
+			<input class="btn btn-info" type="submit" name="Create Task" value="Submit">
+		</form>
 
-		{% comment %} <div class="center-column">
+	</div>
 
-			<h4>Incomplete tasks</h4>
+	{% comment %} <div class="center-column">
 
-			{% for task in tasks %}
-				{% if task.complete == False %}
-					<div class="task">
-						<p>{{task.title}}</p>
-						<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
-						<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
-					</div>
-				{% endif %}
-			{% endfor %}
-			
-			<hr>
-			<h4>Completed tasks</h4>
+		<h4>Incomplete tasks</h4>
 
-			{% for task in tasks %}
-				{% if task.complete == True %}
-					<div class="task">
-						<strike><p>{{task.title}}</p></strike>
-						<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
-						<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
-					</div>
-				{% endif %}
-			{% endfor %}
+		{% for task in tasks %}
+			{% if task.complete == False %}
+				<div class="task">
+					<p>{{task.title}}</p>
+					<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
+					<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
+				</div>
+			{% endif %}
+		{% endfor %}
+		
+		<hr>
+		<h4>Completed tasks</h4>
 
-		</div> {% endcomment %}
+		{% for task in tasks %}
+			{% if task.complete == True %}
+				<div class="task">
+					<strike><p>{{task.title}}</p></strike>
+					<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
+					<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
+				</div>
+			{% endif %}
+		{% endfor %}
 
-		<div class="center-column">
-			<h4>Incomplete tasks</h4>
+	</div> {% endcomment %}
 
-			{% for oldform in oldforms %}
-				{% if oldform.complete.value == False %}
-					<div class="task">
-						<form action={%url 'save_changes' oldform.task_id.value %} method="post">
-							{% csrf_token %}
-							{{oldform}}
-							{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
-							{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
-							<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
-							
-							{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
-							<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
-						</form>
-					</div>
-					<br>
-				{% endif %}
-			{% endfor %}
-			<hr>
-			<h4>Competed tasks</h4>
+	<div class="center-column">
+		<h4>Incomplete tasks</h4>
 
-			{% for oldform in oldforms %}
-				{% if oldform.complete.value == True %}
-					{% comment %} <div class="task" id="task{{forloop.counter}}"> {% endcomment %}
-					<div class="task">
-						<form action={%url 'save_changes' oldform.task_id.value %} method="post">
-							{% csrf_token %}
-							{{oldform}}
-							{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
-							{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
-							<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
-							{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
-							<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
-						</form>
-					</div>
-					<br>
-				{% endif %}
-			{% endfor %}
-		</div>
-	
-	{% endblock body_block %}
-	
-	{% comment %} <script>
-		var editButtons = document.querySelectorAll('.edit-button');
-		var submitButtons = document.querySelectorAll('.submit-button');
-		function editClose(e){
-			var parent = e.parentElement;
-			console.log(parent);
-		}
-		function editOpen(e){
-			
-		}
-		function changeEditStatus(e){
-			console.log("Opening "+e.id);
-			if(e.innerHTML=="Edit"){
-				editOpen(e);
-				console.log("Opening "+e.id);
-			}else{
-				editClose(e);
-			}
-		}
-		for (const editButton of editButtons){
-			editButton.addEventListener('click',()=>changeEditStatus(editButton));
-		}
-		for (const editButton of editButtons){
-			editClose(editButton);
-		}
-		console.log(editButtons);
-		console.log("hi");
-	</script> {% endcomment %}
-</body>
-</html>
+		{% for oldform in oldforms %}
+			{% if oldform.complete.value == False %}
+				<div class="task">
+					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
+						{% csrf_token %}
+						{{oldform}}
+						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
+						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
+						
+						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
+					</form>
+				</div>
+				<br>
+			{% endif %}
+		{% endfor %}
+		<hr>
+		<h4>Competed tasks</h4>
+
+		{% for oldform in oldforms %}
+			{% if oldform.complete.value == True %}
+				{% comment %} <div class="task" id="task{{forloop.counter}}"> {% endcomment %}
+				<div class="task">
+					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
+						{% csrf_token %}
+						{{oldform}}
+						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
+						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
+						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
+					</form>
+				</div>
+				<br>
+			{% endif %}
+		{% endfor %}
+	</div>
+{% endblock body_block %}
 
 
+
+{% block block_scripts %}
+<script src="{% static 'js/tasks/list.js' %}"></script>
+{% endblock block_scripts %}
