@@ -7,4 +7,5 @@ class TaskForm(forms.ModelForm):
     task_id  = forms.IntegerField(initial=0,required=False,widget=forms.HiddenInput())
     class Meta:
         model = Task
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['title','complete']

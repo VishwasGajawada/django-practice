@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+{% extends 'tasks/base.html' %}
+{% block block_title %}
+    LOGIN
+{% endblock block_title %}
+
+{% block body_block %}
+	<div class="center-column">
+		<form action="/login/" method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Login">
+        </form>
+        <hr>
+        <p>Don't have an account yet ? <a href="{% url 'signup'%}">Signup Here</a></p>
+	</div>
+{% endblock body_block %}
+

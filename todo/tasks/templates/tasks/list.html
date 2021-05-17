@@ -1,144 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-	crossorigin="anonymous">
-	<style>
-		body{
-			background-color: #638CB8;
-		}
-		input{
-			width: 100%;
-			padding: 12px 20px;
-			margin: 8px 0;
-			box-sizing: border-box;
-		}
-		input::placeholder {
-		color: #d3d3d3;
-		}
-		.submit{
-			background-color: #6BA3E8;
-		}
-		.center-column{
-			width:600px;
-			{% comment %} min-width:510px; {% endcomment %}
-			margin: 20px auto;
-			padding:20px;
-			background-color: #fff;
-			border-radius: 3px;
-			box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
-		}
-		.task{
-			background-color: #906abd;
-			margin: 10px;
-			padding: 20px;
-			border-radius: 3px;
-			color: #fff;
-			font-size: 16px;
-			box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
-		}
-		.btn-danger{
-			background-color: #ffae19;
-			border-color: #e59400;
-		}
-		.edit-button{
-			cursor:pointer;
-		}
-		.invisble{
-			display : none;
-		}
-		
-	</style>
-	<title>Document</title>
-</head>
+{% extends 'tasks/base.html' %}
+
+{% block block_title %}
+	{% if user.is_authenticated %}
+		Welcome {{user.username}}
+	{% else %}
+	{% endif %}
+{% endblock block_title %}
+
 <body>
-	<div class="center-column">
+	{% block body_block %}
+		<div class="center-column">
+			<h4>Add Task</h4>
+			<form action="/" method="POST">
+				{% csrf_token %}
+				{{form.title}}
+				<input class="btn btn-info" type="submit" name="Create Task" value="Submit">
+			</form>
+
+		</div>
+
+		{% comment %} <div class="center-column">
+
+			<h4>Incomplete tasks</h4>
+
+			{% for task in tasks %}
+				{% if task.complete == False %}
+					<div class="task">
+						<p>{{task.title}}</p>
+						<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
+						<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+			
+			<hr>
+			<h4>Completed tasks</h4>
+
+			{% for task in tasks %}
+				{% if task.complete == True %}
+					<div class="task">
+						<strike><p>{{task.title}}</p></strike>
+						<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
+						<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+
+		</div> {% endcomment %}
+
+		<div class="center-column">
+			<h4>Incomplete tasks</h4>
+
+			{% for oldform in oldforms %}
+				{% if oldform.complete.value == False %}
+					<div class="task">
+						<form action={%url 'save_changes' oldform.task_id.value %} method="post">
+							{% csrf_token %}
+							{{oldform}}
+							{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
+							{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
+							<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
+							
+							{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
+							<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
+						</form>
+					</div>
+					<br>
+				{% endif %}
+			{% endfor %}
+			<hr>
+			<h4>Competed tasks</h4>
+
+			{% for oldform in oldforms %}
+				{% if oldform.complete.value == True %}
+					{% comment %} <div class="task" id="task{{forloop.counter}}"> {% endcomment %}
+					<div class="task">
+						<form action={%url 'save_changes' oldform.task_id.value %} method="post">
+							{% csrf_token %}
+							{{oldform}}
+							{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
+							{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
+							<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
+							{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
+							<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
+						</form>
+					</div>
+					<br>
+				{% endif %}
+			{% endfor %}
+		</div>
 	
-		<h2>To-Do</h2>
-		<h4>Add Task</h4>
-		<form action="/" method="POST">
-			{% csrf_token %}
-			{{form.title}}
-			<input class="btn btn-info" type="submit" name="Create Task" value="Submit">
-		</form>
-
-	</div>
-
-	{% comment %} <div class="center-column">
-
-		<h4>Incomplete tasks</h4>
-
-		{% for task in tasks %}
-			{% if task.complete == False %}
-				<div class="task">
-					<p>{{task.title}}</p>
-					<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
-					<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
-				</div>
-			{% endif %}
-		{% endfor %}
-		
-		<hr>
-		<h4>Completed tasks</h4>
-
-		{% for task in tasks %}
-			{% if task.complete == True %}
-				<div class="task">
-					<strike><p>{{task.title}}</p></strike>
-					<a class="btn btn-sm btn-info" href="{%url 'update_task' task.id %}">Edit</a>
-					<a class="btn btn-sm btn-danger" href="{%url 'delete_task' task.id %}">Delete</a>
-				</div>
-			{% endif %}
-		{% endfor %}
-
-	</div> {% endcomment %}
-
-	<div class="center-column">
-		<h4>Incomplete tasks</h4>
-
-		{% for oldform in oldforms %}
-			{% if oldform.complete.value == False %}
-				<div class="task">
-					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
-						{% csrf_token %}
-						{{oldform}}
-						{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
-						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
-						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
-						
-						{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
-						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
-					</form>
-				</div>
-				<br>
-			{% endif %}
-		{% endfor %}
-
-		<h4>Competed tasks</h4>
-
-		{% for oldform in oldforms %}
-			{% if oldform.complete.value == True %}
-				<div class="task" id="task{{forloop.counter}}">
-					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
-						{% csrf_token %}
-						{{oldform}}
-						{% comment %} <a class="btn btn-sm btn-info" href="{%url 'save_changes' oldform.task_id.value %}">Save changes</a> {% endcomment %}
-						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
-						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
-						{% comment %} <input type="submit" class="btn btn-sm btn-info" value="Save Changes"> {% endcomment %}
-						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
-					</form>
-				</div>
-				<br>
-			{% endif %}
-		{% endfor %}
-	</div>
-	<script>
-		{% comment %} var editButtons = document.querySelectorAll('.edit-button');
+	{% endblock body_block %}
+	
+	{% comment %} <script>
+		var editButtons = document.querySelectorAll('.edit-button');
 		var submitButtons = document.querySelectorAll('.submit-button');
 		function editClose(e){
 			var parent = e.parentElement;
@@ -163,8 +119,8 @@
 			editClose(editButton);
 		}
 		console.log(editButtons);
-		console.log("hi"); {% endcomment %}
-	</script>
+		console.log("hi");
+	</script> {% endcomment %}
 </body>
 </html>
 
