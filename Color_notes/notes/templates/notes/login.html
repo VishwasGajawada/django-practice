@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-
-{% extends 'tasks/base.html' %}
+{% extends "notes/base.html" %}
+{% load static %}
 
 {% block block_title %}
-    SIGN UP
+LOGIN
 {% endblock block_title %}
 
-{% block body_block %}
-	<div class="center-column">
-		<form action="/signup/" method="post">
+{% block block_body %}
+    <div class="center-column">
+		<form action="/login/" method="post">
             {% csrf_token %}
-            {% comment %} {{form.as_p}} {% endcomment %}
             {% for field in  form.visible_fields %}
                 <h4 class='pt-2'>{{field.label}}</h4>
                 {% if field.errors %}
                     <div class="alert alert-danger">
-                    {{field.errors}}
+                        {{field.errors}}
                     </div>
                 {% endif %}
                 
                 {{field.help_text}}
                 {{field}}
-            {% endfor %}   
-            <hr>
-            <input type="submit" value="Create Account">
+            {% endfor %}  
+            <input type="submit" value="Login">
         </form>
         <hr>
-        <p>Already have an account? <a href="{% url 'login'%}">Login Here</a></p>
+        <p>Don't have an account yet ? <a href="{% url 'signup'%}">Signup Here</a></p>
 	</div>
-{% endblock body_block %}
-
-
+{% endblock block_body %}

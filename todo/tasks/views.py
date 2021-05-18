@@ -33,7 +33,7 @@ def index(request):
     return render(request,'tasks/list.html',context)
 
 def login(request):
-    form = AuthenticationForm()
+    # form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -44,9 +44,8 @@ def login(request):
             if user is not None:
                 loginUser(request, user)
                 return redirect('/')
-            
-
-
+    else:
+        form = AuthenticationForm()
     context = {"form":form}
     return render(request,'tasks/login.html',context)
 
@@ -54,7 +53,7 @@ def signup(request):
     form = UserCreationForm()
 
     if request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
