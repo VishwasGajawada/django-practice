@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,13 +26,14 @@ SECRET_KEY = 'django-insecure-%ch5uat+=2lioa^p837&7zgqxss-3020vw9x5@-^rw17%&w&63
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-# # developing
+# developing
 # DEBUG = True
 # ALLOWED_HOSTS = []
 
-# production
+# TODO:change in production
+# # production
 DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1','colornotes.herokuapp.com/']
+ALLOWED_HOSTS = ['127.0.0.1','colornotes.herokuapp.com']
 
 # Application definition    
 
@@ -48,7 +50,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  #added during heroku deployment
+
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  #added during heroku deployment
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,15 +129,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+django_heroku.settings(locals()) #magic
