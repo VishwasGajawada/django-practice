@@ -9,14 +9,24 @@
 	<div class="center-column">
 		<form action="/login/" method="post">
             {% csrf_token %}
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
             {% for field in  form.visible_fields %}
                 <h4 class='pt-2'>{{field.label}}</h4>
-                {% if field.errors %}
-                    <div class="alert alert-danger">
-                        {{field.errors}}
-                    </div>
-                {% endif %}
-                
                 {{field.help_text}}
                 {{field}}
             {% endfor %}  

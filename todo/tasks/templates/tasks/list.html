@@ -17,10 +17,14 @@
 		.clickable{
 			cursor: pointer;
 		}
+		
 		input{
 			background:transparent;
 			outline:none;
 			color:white;
+		}
+		.newtask,.newtask > *{
+			color:black;
 		}
 	</style>
 {% endblock block_css %}
@@ -28,7 +32,7 @@
 {% block body_block %}
 	<div class="center-column">
 		<h4>Add Task</h4>
-		<form action="/" method="POST">
+		<form action="/" method="POST" class="newtask">
 			{% csrf_token %}
 			{{form.title}}
 			<input class="btn btn-info" type="submit" name="Create Task" value="Submit">
@@ -79,7 +83,8 @@
 						{{oldform}}
 						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
 						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
-						
+						{% comment %} <a class="btn btn-sm btn-info close-button">Close</a> {% endcomment %}
+						<a class="btn btn-sm btn-info" href="">Close</a>
 						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
 					</form>
 				</div>
@@ -101,6 +106,8 @@
 						{{oldform}}
 						{% comment %} <div class="btn btn-sm btn-info edit-button">Edit</div> {% endcomment %}
 						<button class="btn btn-sm btn-info save-button" type="submit">Save changes</button>
+						{% comment %} <a class="btn btn-sm btn-info close-button">Close</a> {% endcomment %}
+						<a class="btn btn-sm btn-info" href="">Close</a>
 						<a class="btn btn-sm btn-danger" href="{%url 'delete_task'  oldform.task_id.value %}">Delete</a>
 					</form>
 				</div>
@@ -118,7 +125,7 @@
 	tasks = document.querySelectorAll('.task');
 	oldforms = document.querySelectorAll('.task form');
 	normals  = document.querySelectorAll('.task .normal');
-	
+	close_buttons = document.querySelectorAll('.close-button');
 	function clicked(task){
 		tasks.forEach((task2)=>{
 			task2.classList.add('clickable');
@@ -137,8 +144,19 @@
 		children[3].classList.remove('invisible');
 		//console.log(children);
 	}
-	
+	function close_task(e){
+		var task = (e.parentNode).parentNode;
+		var children = task.childNodes;
+		console.log(children);
+		children[1].classList.remove('invisible');
+		children[3].classList.add('invisible');
+		console.log(children);
+	}
+	close_buttons.forEach((clb)=>{
+		clb.addEventListener('click',()=>close_task(clb));
+	});
 	tasks.forEach((task)=>{
+		//console.log(task);
 		task.classList.add('clickable');
 		task.addEventListener('click',()=>clicked(task));
 	});

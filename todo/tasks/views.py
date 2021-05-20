@@ -71,6 +71,8 @@ def logout(request):
 @login_required(login_url='login')
 def updateTask(request,pk):
     task = Task.objects.get(id = pk)
+    if task.user!=request.user:
+        return redirect('list')    
     form = TaskForm(instance=task)
     if request.method == 'POST':
         form = TaskForm(request.POST,instance=task)
@@ -84,6 +86,8 @@ def updateTask(request,pk):
 @login_required(login_url='login')
 def saveChanges(request,pk):
     task = Task.objects.get(id = pk)
+    if task.user!=request.user:
+        return redirect('list')
     if request.method == 'POST':
         form = TaskForm(request.POST,instance=task)
         if form.is_valid():
@@ -93,7 +97,8 @@ def saveChanges(request,pk):
 @login_required(login_url='login')
 def deleteTask(request,pk):
     task = Task.objects.get(id=pk)
-
+    if task.user!=request.user:
+        return redirect('list')
     if request.method == 'POST':
         task.delete()
         return redirect('/')
