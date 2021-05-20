@@ -9,6 +9,21 @@
 	{% endif %}
 {% endblock block_title %}
 
+{% block block_css %}
+	<style>
+		.invisible{
+			display:none;
+		}
+		.clickable{
+			cursor: pointer;
+		}
+		input{
+			background:transparent;
+			outline:none;
+			color:white;
+		}
+	</style>
+{% endblock block_css %}
 
 {% block body_block %}
 	<div class="center-column">
@@ -56,6 +71,9 @@
 		{% for oldform in oldforms %}
 			{% if oldform.complete.value == False %}
 				<div class="task">
+					<div class="normal">
+						<p>{{oldform.title.value}}</p>
+					</div>
 					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
 						{% csrf_token %}
 						{{oldform}}
@@ -75,6 +93,9 @@
 			{% if oldform.complete.value == True %}
 				{% comment %} <div class="task" id="task{{forloop.counter}}"> {% endcomment %}
 				<div class="task">
+					<div class="normal">
+						<p><strike>{{oldform.title.value}}</strike> </p>
+					</div>
 					<form action={%url 'save_changes' oldform.task_id.value %} method="post">
 						{% csrf_token %}
 						{{oldform}}
@@ -93,4 +114,36 @@
 
 {% block block_scripts %}
 <script src="{% static 'js/tasks/list.js' %}"></script>
+<script>
+	tasks = document.querySelectorAll('.task');
+	oldforms = document.querySelectorAll('.task form');
+	normals  = document.querySelectorAll('.task .normal');
+	
+	function clicked(task){
+		tasks.forEach((task2)=>{
+			task2.classList.add('clickable');
+		})
+		task.classList.remove('clickable');	
+		oldforms.forEach((form)=>{
+			form.classList.add('invisible');
+		})
+		normals.forEach((normal)=>{
+			normal.classList.remove('invisible');
+			//normal.style.display = 'block';
+		})
+		var children = task.childNodes;
+		//console.log(children);
+		children[1].classList.add('invisible');
+		children[3].classList.remove('invisible');
+		//console.log(children);
+	}
+	
+	tasks.forEach((task)=>{
+		task.classList.add('clickable');
+		task.addEventListener('click',()=>clicked(task));
+	});
+	oldforms.forEach((form)=>{
+		form.classList.add('invisible');
+	});
+</script>
 {% endblock block_scripts %}
