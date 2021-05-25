@@ -71,13 +71,7 @@
     .submit{
         margin:5px  auto;
     }
-    @media screen and (max-width:500px){
-    .header_logo{
-        display:none;  
-        width: 0;
-        visibility: hidden;
-    }
-}
+    
 </style>
 {% endblock css_block %}
 
@@ -120,7 +114,7 @@
                     <div class="subject_links">
                         
                         {% if user.is_teacher %}
-                        <a href="#" class="sub_link" title="Add quiz"><i class='bx bx-plus-circle' ></i></a>
+                        <a href="{% url 'subject' sub.slug %}" class="sub_link" title="Add quiz"><i class='bx bx-plus-circle' ></i></a>
                         {% endif %}
                         <a href="{%url 'subject_grades' sub.slug%}" class="sub_link" title="Grades"><i class='bx bx-notepad' ></i></a>
                         <a href="{%url 'subject_people' sub.slug%}" class="sub_link" title="People"><i class='bx bxs-user' ></i></a>
