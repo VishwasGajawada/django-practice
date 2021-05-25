@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+{% extends 'registration/login.html' %}
+{% comment %} {% extends 'quizapp/base.html' %} {% endcomment %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block nav_block %}{% endblock nav_block %}
+
+{% block form_block %}
+    <div class="heading">
+        <h3>Signup as Teacher</h3>
+    </div>
+    <br>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{user_form|crispy}}
+
+        {{teacher_form|crispy}}
+        <input type="submit" value="Register">
+    </form>
+    <hr>
+    Already have an account ? <a href="{%url 'login' %}">Login </a>
+    
+{% endblock form_block %}

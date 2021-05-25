@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends 'quizapp/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css_block %}
+<style>
+    .form_container{
+        width : 430px;
+        margin:50px auto;
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        border-radius :5px;
+        padding:20px;
+    }
+    @media screen and (max-width:450px){
+        .form_container{
+            width :300px;
+        }
+    }
+    .submit{
+        margin:5px  auto;
+    }
+</style>
+{% endblock css_block %}
+
+{% comment %} empty {% endcomment %}
+{% block toggle_bar %}{% endblock toggle_bar %}
+{% block nav_block %}{% endblock nav_block %}
+
+
+{% block body_block %}
+    <div class="form_container">
+    
+        {% block form_block %}
+            <div class="heading">
+                <h3>Login</h3>
+            </div>
+            <hr>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" value="Login" class="submit">
+            </form>
+            <hr>
+            Don't have an account yet ?<a href="{%url 'signup' %}">Signup </a>
+        {% endblock form_block %}
+        
+    </div>
+    
+
+{% endblock body_block %}

@@ -58,13 +58,17 @@
 
                     <div class="post-bottom">
                         <h4>{{post.title|title}}</h4>
-                        <p><strong>{{post.user.username}}</strong>
+                        <p><strong>{{post.user.username}}</strong></p>
+                        <p>Description : 
                         {% if post.description %}
                             {{post.description}}
-                            {% if user == post.user %}
-                                <i class="fa fa-edit pl-3 edit"  style="cursor: pointer;"></i>
-                            {% endif %}
-                        {% endif %} </p>
+                        {% endif %} 
+                         
+                        {% if user == post.user %}
+                            <i class="fa fa-edit pl-3 edit"  style="cursor: pointer;"></i>
+                        {% endif %}
+                        </p>
+                       
                         <p> {{post.created}}</p>
                     </div>
                 </div>

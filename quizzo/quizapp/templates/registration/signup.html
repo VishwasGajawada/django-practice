@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+
+{% extends 'registration/login.html' %}
+{% comment %} {% extends 'quizapp/base.html' %} {% endcomment %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css_style %}
+
+{% endblock css_style %}
+
+{% block nav_block %}{% endblock nav_block %}
+
+{% block form_block %}
+    <div class="heading">
+        <h3>Signup as</h3>
+    </div>
+    <br>
+    <a href="{%url 'student_signup'%}" class="btn btn-outline-primary  ">Student</a>
+    <a href="{%url 'teacher_signup'%}" class="btn btn-outline-info">Teacher</a>
+    <hr>
+    Already have an account ? <a href="{%url 'login' %}">Login </a>
+
+{% endblock form_block %}
+
+

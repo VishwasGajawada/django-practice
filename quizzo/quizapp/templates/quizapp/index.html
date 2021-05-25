@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% extends 'quizapp/base.html' %}
+{% load static %}
+
+{% block css_block %}
+<style>
+    .join_sub{
+        font-size:27px;
+        color:var(--first-color);
+    }
+    .join_sub i{
+        border:1.5px solid var(--container-color);
+        border-radius:50%;
+        transition:0.1s all ease;
+    }
+    .join_sub:hover i{
+        border:1.5px solid var(--first-color);
+    }
+    .subjects{
+        margin:30px 0;
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+    .subject{
+        height : 300px;
+        width  : 300px;
+        border-radius:10px;
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        margin:10px;
+
+        position: relative;
+    }
+    .subject_top{
+        width : 100%;
+        height:30%;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        padding:10px;
+        border-radius:10px 10px 0 0;
+    }
+    .subject_title{
+        color:var(--container-color);
+    }
+    .subject_middle{
+        height:60%;
+    }
+    .subject_links{
+        border-top:1px solid rgba(22,8,43,.1);
+        position:absolute;
+        bottom:0;
+        left:0;
+        display:flex;
+        justify-content:flex-end;
+        font-size:27px;
+        width: 100%
+    }
+    .sub_link{
+        color:var(--text-color);
+    }
+
+    /*for forms which extend index.html*/
+    .form_container{
+        width : 430px;
+        margin:50px auto;
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        border-radius :5px;
+        padding:20px;
+    }
+    .submit{
+        margin:5px  auto;
+    }
+    @media screen and (max-width:500px){
+    .header_logo{
+        display:none;  
+        width: 0;
+        visibility: hidden;
+    }
+}
+</style>
+{% endblock css_block %}
+
+{% block subject_list %}
+    <div class="nav_items">
+        <h3 class="nav_title">Enrolled in</h3>
+        {% for sub in subjects %}
+            <a href="{% url 'subject' sub.slug %}" class="nav_link">
+                <span class="nav_icon" style="background:{{sub.color}};color:white;padding:0 5px;">
+                {{ sub.name|slice:"1" }}
+                </span>
+                <span class="nav_name">{{sub.name}}</span>
+            </a>
+            {% comment %} <br> {% endcomment %}
+        {% endfor %}
+
+    </div>
+{% endblock subject_list %}
+
+
+{% block join_subject_block %}
+    <a href="{%url 'add_subject' %}" title="Join another subject" class="join_sub"><i class='bx bx-plus' ></i></a>
+    
+{% endblock join_subject_block %}
+
+{% block body_block %}
+    
+    <div class="container">
+    <h3 class="mt-3">Your subjects</h3>
+    <div class="subjects">
+        {% for sub in subjects%}
+            <a href="{% url 'subject' sub.slug %}">
+                <div class="subject">
+                    <div class="subject_top"   style="background:{{sub.color}}">
+                        <div class="subject_title">
+                            <h5>{{sub.name|title}}</h5>
+                        </div>
+                    </div>
+                    <div class="subject_middle"></div>
+                    <div class="subject_links">
+                        
+                        {% if user.is_teacher %}
+                        <a href="#" class="sub_link" title="Add quiz"><i class='bx bx-plus-circle' ></i></a>
+                        {% endif %}
+                        <a href="{%url 'subject_grades' sub.slug%}" class="sub_link" title="Grades"><i class='bx bx-notepad' ></i></a>
+                        <a href="{%url 'subject_people' sub.slug%}" class="sub_link" title="People"><i class='bx bxs-user' ></i></a>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    </div>
+
+    
+
+{% endblock body_block %}
+

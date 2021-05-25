@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+{% extends 'quizapp/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css_block %}
+<style>
+    *{
+        --first-color : {{subject.color}};
+    }
+    a > *{
+        color: var(--text-color);
+    }
+    a:hover > *{
+        color :  var(--first-color);
+    }
+    .current_sub{
+        background:var(--first-color-light);
+        border-radius:0 10px 10px 0;
+    }
+    .h_contents{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        width:100%;
+        margin:0 auto;
+    }
+    .h_link{
+        margin:0 20px;
+        color:var(--text-color);
+        border-bottom:2px solid transparent;
+    }
+    .h_link:hover{
+        color:var(--first-color);
+    }
+    .current{
+        color:var(--first-color);
+        border-bottom:2px solid var(--first-color);
+    }
+    .subject_header{
+        height:250px;
+        padding:15px;
+        border-radius:20px;
+    }
+    .subject_title{
+        font-weight:var(--font-semi-bold);
+        font-size:50px;
+        text-transform: uppercase;
+    }
+    @media screen and (max-width:700px){
+        .subject_header{
+            height:180px;
+        }
+        .subject_title{
+            font-size:30px;
+        }
+    }
+    @media screen and (max-width:500px){
+        .header_logo{
+            display:none;  
+            width: 0;
+            visibility: hidden;
+        }
+    } 
+    .column{
+        margin:18px 0 0 0 ;
+        /*box-shadow : 0 0 5px 2px rgba(22,8,43,.1);*/
+        box-shadow:  13px 13px 15px #cccacf,
+             -13px -13px 15px #ffffff;
+        border-radius :5px;
+        transition:0.5s all ease;
+        padding:10px 10px;
+    }
+    a:hover .column {
+        box-shadow:  7px 7px 5px #dbd8df,
+             -7px -7px 5px #ffffff;
+    }
+    .new_quiz {
+        cursor:pointer;
+        padding:10px;
+        width:500px;
+        max-width:100%;
+        margin:20px auto;
+    }
+    @media screen and (max-width:550px){
+        .new_quiz{
+            width:290px;
+        }
+    }
+    .invisible{
+        display:none;
+    }
+    .mini-dp{
+        width:50px;height:auto;
+        border-radius:50%
+    }
+    .quiz_top{
+        display:flex;
+        align-items:center;
+        margin-bottom:20px;
+    }
+    .quiz_title_matter{
+        padding:20px;
+    }
+
+    {% block more_styles %}{% endblock more_styles %}
+</style>
+{% endblock css_block %}
+
+{% block header_contents %}
+    <div class="h_contents">
+    <a href="{%url 'subject' subject.slug %}" class="h_link current">Stream</a>
+    <a href="{%url 'subject_grades' subject.slug  %}" class="h_link">Grades</a>
+    <a href="{%url 'subject_people' subject.slug  %}" class="h_link">People</a>
+    </div>
+{% endblock header_contents %}
+
+
+{% block subject_list %}
+    <div class="nav_items">
+        <h3 class="nav_title">Enrolled in</h3>
+        {% for sub in subjects %}
+            {% if sub == subject %}
+            <a href="{% url 'subject' sub.slug %}"  class="nav_link current_sub">
+            {% else %}
+            <a href="{% url 'subject' sub.slug %}"  class="nav_link">
+            {% endif %}
+            
+                <span class="nav_icon" style="background:{{sub.color}};color:white;padding:0 5px;">
+                {{ sub.name|slice:"1" }}
+                </span>
+                <span class="nav_name">{{sub.name}}</span>
+            </a>
+            {% comment %} <br> {% endcomment %}
+        {% endfor %}
+
+    </div>
+{% endblock subject_list %}
+
+{% block body_block %}
+    <div class="container mt-4" style="margin-bottom:80px;">
+        <div class="subject_header" style="background:{{subject.color}}">
+            <h2 class="subject_title">{{subject.name}}</h2>
+        </div>
+
+        <div class="container">
+            {% if user.is_teacher %}
+                <div class="column new_quiz">
+                    <h3 class="mb-2">Add a new quiz</h3>
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <form  class="quizform" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{quizform|crispy}}
+                        <input type="submit" value="Add Quiz">
+                    </form>
+                </div>
+            {% endif %}
+            
+
+            {% for quiz in quizzes %}
+                <a href="{% url 'quiz_detail' subject.slug quiz.id%}">
+                    <div class="column quiz">
+                        <div class="quiz_top mb-2">
+                            {% if quiz.teacher.user.profile_pic %}
+                                <img src="{{quiz.teacher.user.profile_pic.url}}" class="mini-dp" alt="">
+                            {% else %}
+                                <img src="/media/profile_pics/default_profile.png" class="mini-dp" alt="">
+                            {% endif %}
+                            <div clsas="p-1" style="margin-left:10px;">
+                                <h6><strong> {{quiz.teacher.user.username|title}} </strong></h6>
+                                <p style="margin:0;font-size:15px;">{{quiz.created_time|date:'M-d , H:y'}}</p>
+                            </div>
+                        </div>
+                        <div class="quiz_title_matter"><h6>{{quiz.title}}</h6></div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock body_block %}
+
+{% block scripts_block %}
+    <script>
+    </script>
+
+{% endblock scripts_block %}

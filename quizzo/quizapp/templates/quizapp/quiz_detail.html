@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+{% extends 'quizapp/subject.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block more_styles %}
+    {% comment %} body{
+        background:red;
+    } {% endcomment %}
+    .question_div,.answer_upload_div,.answers_submitted_div{
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        margin:20px;
+        padding:20px;
+    }
+    .answers_submitted_div{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+    }
+    .input{
+        max-width:100%;
+    }
+
+{% endblock more_styles %}
+
+{% comment %} <style>
+    .question_div,.answer_upload_div{
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        margin:20px;
+        padding:20px;
+    }
+</style> {% endcomment %}
+
+{% block body_block %}
+    <div class="container mt-5 mb-5">
+        <div class="question_div">
+            <div class="container">
+                <div class="quiz_top">
+                    {% if quiz.teacher.user.profile_pic %}
+                        <img src="{{quiz.teacher.user.profile_pic.url}}" class="mini-dp" alt="">
+                    {% else %}
+                        <img src="/media/profile_pics/default_profile.png" class="mini-dp" alt="">
+                    {% endif %}
+                    <div clsas="p-1" style="margin-left:10px;">
+                        <h6><strong> {{quiz.teacher.user.username|title}} </strong></h6>
+                        <p style="margin:0;font-size:15px;">{{quiz.created_time|date:'M-d'}}</p>
+                    </div>
+                </div>
+                <div class="question_title"><h4>{{quiz.title|title}}</h4></div>
+                {% if quiz.description %}
+                    <div class="question_description"><p>{{quiz.description}}</p></div>
+                {% endif %}
+                {% if quiz.question_file %}
+                    <i class='bx bxs-file-pdf  bx-sm'></i>
+                    <a href="{{quiz.question_file.url}}" download = "{{subject.slug}}-quiz-{{quiz.id}}">Download the quiz file</a>
+                {% endif %}
+                
+            </div>
+        </div>
+        {% if user.is_student %}
+            {% if submitted %}
+                <div class="answer_upload_div">
+                    
+                    <div class="answer_upload_heading alert alert-success"><h4>Your Submitted Work</h4></div>
+                    <div class="answer_upload_form">
+                        <a href="{{answer.answer_file.url}}">Your answer file</a>
+                        <p>Uploaded at : {{answer.created_time}}</p>
+                        <p>{{answer.score}}</p>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="answer_upload_div">
+                    
+                    <div class="answer_upload_heading alert alert-warning"><h4>Submit Your Work</h4></div>
+                    <div class="answer_upload_form">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{answer_form|crispy}}
+                            <input type="submit" value="Upload" class="btn btn-outline-primary">
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            
+        {% else %}
+            <h4>Not yet Marked :</h4>
+            {% for submitted_answer in submitted_answers %}
+            {% if not submitted_answer.score %}
+                
+                <div class="answers_submitted_div">
+                    <div class="quiz_top">
+                        {% if submitted_answer.student.user.profile_pic %}
+                            <img src="{{submitted_answer.student.user.profile_pic.url}}" class="mini-dp" alt="">
+                        {% else %}
+                            <img src="/media/profile_pics/default_profile.png" class="mini-dp" alt="">
+                        {% endif %}
+                        <div clsas="p-1" style="margin-left:10px;">
+                            <h6><strong> {{submitted_answer.student.user.username|title}} </strong></h6>
+                            <p style="margin:0;font-size:15px;">{{submitted_answer.created_time|date:'M-d'}}</p>
+                        </div>
+                    </div>
+                    <div class="submitted_answer_file">
+                        <i class='bx bxs-file-pdf bx-sm'></i>
+                        <a href="{{submitted_answer.answer_file.url}}">Answer File</a>
+                    </div>
+                    <div class="answer_marking_div">
+                        <form action="{% url 'mark_answer' submitted_answer.id%}" method="post">
+                            {% csrf_token %}
+                            <input type="number" name="score" id="" placeholder="Score out of 100">
+                            <input type="submit" value="Mark">
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+            <hr>
+            <h4>Marked :</h4>
+            {% for submitted_answer in submitted_answers %}
+            {% if submitted_answer.score %}
+                
+                <div class="answers_submitted_div">
+                    <div class="quiz_top">
+                        {% if submitted_answer.student.user.profile_pic %}
+                            <img src="{{submitted_answer.student.user.profile_pic.url}}" class="mini-dp" alt="">
+                        {% else %}
+                            <img src="/media/profile_pics/default_profile.png" class="mini-dp" alt="">
+                        {% endif %}
+                        <div clsas="p-1" style="margin-left:10px;">
+                            <h6><strong> {{submitted_answer.student.user.username|title}} </strong></h6>
+                            <p style="margin:0;font-size:15px;">{{submitted_answer.created_time|date:'M-d'}}</p>
+                        </div>
+                    </div>
+                    <div class="submitted_answer_file">
+                        <i class='bx bxs-file-pdf  bx-sm'></i>
+                        <a href="{{submitted_answer.answer_file.url}}">Answer File</a>
+                    </div>
+                    <div class="answer_marking_div">
+                        <h6>Score : {{submitted_answer.score}}</h6>
+                        <form action="{% url 'mark_answer' submitted_answer.id%}" method="post">
+                            {% csrf_token %}
+                            <input type="number" name="score" id="" placeholder="Update the score">
+                            <input type="submit" value="Update">
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+                
+            {% endfor %}
+
+        {% endif %}
+        
+    </div>
+{% endblock body_block %}

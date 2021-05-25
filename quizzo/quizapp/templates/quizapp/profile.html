@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% extends 'quizapp/index.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block css_block %}
+    <style>
+        .dp{
+            width : 200px;
+            height :auto;
+            border-radius :50%;
+        }
+        .form_container{
+            width : 430px;
+            margin:50px auto;
+            box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+            border-radius :5px;
+            padding:20px;
+        }
+        @media screen and (max-width:450px){
+            .form_container{
+                width :300px;
+            }
+            .jumbotron{
+                background:transparent;
+            }
+        }
+        @media screen and (max-width:500px){
+            .header_logo{
+                display:none;  
+                width: 0;
+                visibility: hidden;
+            }
+        }
+        .submit{
+            margin:5px  auto;
+        }
+        .jumbotron{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+        .field{
+            padding:10px;
+            max-width:100%;
+        }
+    </style>
+    
+{% endblock css_block %}
+
+{% block body_block %}
+    <div class="container" style="margin:0 auto;">
+    <div class="jumbotron">
+        <div class="heading">
+            <h3>Your Profile</h3>
+            <hr>
+        </div>
+
+        <div class="profile_pic m-2">
+            {% if user.profile_pic %}
+                <img class="dp" src="{{user.profile_pic.url}}" alt="{{user.username}}'s picture">
+            {% else %}
+                <img class="dp" src="/media/profile_pics/default_profile.png" alt="{{user.username}}'s picture">
+            {% endif %}
+        </div>
+        <div class="fields" style="">
+            <div class=" field">
+                <h5>Username : {{user.username}}</h5>
+            </div>
+            <div class=" field">
+                <h5>Email : {{user.email}}</h5>
+            </div>
+            {% if user.is_student %}
+                <div class="field"><h5>Role : Student</h5> </div>
+                <div class=" field">
+                    <h5>Registration Number : {{profile.registration_number}}</h5>
+                </div>
+                <div class=" field">
+                    <h5>Roll Number : {{profile.roll_no}}</h5>
+                </div>
+            {% else %}
+                <div class="field"><h5>Role : Teacher</h5></div>
+            {% endif %}
+            <div class="row field">
+                <h5>Subjects :</h5>
+                <ul>
+                    {% for sub in profile.subjects.all %}
+                        <p><li>{{sub.name}}</li></p>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+
+    </div>
+    </div>
+    
+    <div class="form_container">
+    
+        <div class="heading">
+            <h3>Update Profile</h3>
+        </div>
+        <hr>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{user_form|crispy}}
+            {{profile_form|crispy}}
+
+            <input type="submit" value="Update" class="submit">
+        </form>
+        <hr>
+        
+    </div>
+
+{% endblock body_block %}
+
+

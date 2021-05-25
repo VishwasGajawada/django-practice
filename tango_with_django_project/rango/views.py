@@ -8,6 +8,7 @@ from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from datetime import datetime
 
 
+
 def register(request):
     registered = False
     # becomes true after successful registration

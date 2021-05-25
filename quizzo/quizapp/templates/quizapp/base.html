@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block css_block %}{% endblock css_block %}
+</head>
+<body>
+    
+    <header class="header">
+        <div class="header_container">
+            <div>
+            <a href="/" class="header_logo">Quizzo</a>
+            </div>
+
+            {% block header_contents %}
+            
+            
+            {% endblock header_contents %}
+
+            <div class="header_right ml-auto">
+                {% block join_subject_block %}{% endblock join_subject_block %}
+                {% block toggle_bar %}
+                <div class="header_toggle">
+                    <i class='bx bx-menu' id="toggle_icon"></i>
+                </div>
+                {% endblock toggle_bar %}
+            </div>
+             
+        </div>
+    </header>
+
+    {% block nav_block %}
+    <div class="nav" id="navbar">
+        <nav class="nav_container">
+            <div>
+                <a href="/" class="nav_link nav_logo">
+                    <i class='bx bx-disc nav_icon'></i>
+                    <span class="nav_name">Quizzo</span>
+                </a>
+                <div class="nav_list">
+                    <div class="nav_items">
+                        <h3 class="nav_title">Profile
+                            {% if user.is_authenticated %}
+                                ({{ user.username}})
+                            {% endif %}
+                        </h3>
+                        <a href="{% url 'profile' %}" class="nav_link">
+                            <i class='bx bx-user nav_icon' ></i>
+                            <span class="nav_name">Profile</span>
+                        </a>
+                        <a href="/" class="nav_link">
+                            <i class='bx bx-book-open nav_icon'></i>
+                            <span class="nav_name">Classes</span>
+                        </a>
+                        <a href="{% url 'logout' %}" class="nav_link">
+                            <i class='bx bx-log-out nav_icon'></i>
+                            <span class="nav_name">Logout</span>
+                        </a>
+                    </div>
+
+                    {% block subject_list %}{% endblock subject_list %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    {% endblock nav_block %}
+
+    {% block body_block %}{% endblock body_block %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        const toggleBtn = document.getElementById('toggle_icon');
+        const nav = document.getElementById('navbar');
+        function showMenu(){
+            console.log("hi");
+            nav.classList.toggle('show_menu');
+            toggleBtn.classList.toggle('bx-x');
+        }
+        toggleBtn.addEventListener('click', ()=>showMenu());
+    </script>
+    {% block scripts_block %}{% endblock scripts_block %}
+</body>
+</html>

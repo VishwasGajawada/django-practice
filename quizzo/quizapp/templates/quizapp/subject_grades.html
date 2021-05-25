@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% extends 'quizapp/subject.html' %}
+{% load static %}
+
+{% block more_styles %}
+    .marks_container{
+        width:500px;
+        margin:30px auto;
+        max-width:100%;
+    }
+    
+    .answer{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow : 0 0 5px 1px rgba(22,8,43,.1);
+        margin:20px auto;
+        padding:20px;
+        font-size:20px;
+        width: 100%;
+    }
+    @media screen and (max-width:575px){
+        .subject_container{
+            width:300px;
+        }
+        .answer{
+            width:300px;
+            font-size:15px;
+        }
+    }
+    
+    .score{
+        margin-left:auto;
+    }
+{% endblock more_styles %}
+
+
+{% block header_contents %}
+    <div class="h_contents">
+    <a href="{%url 'subject' subject.slug %}" class="h_link">Stream</a>
+    <a href="{%url 'subject_grades' subject.slug  %}" class="h_link current">Grades</a>
+    <a href="{%url 'subject_people' subject.slug  %}" class="h_link">People</a>
+    </div>
+{% endblock header_contents %}
+
+
+{% block body_block %}
+    <div class="container">
+        <div class="marks_container">
+            <h3 class="people_heading mb-3">Scores
+            {% if user.is_student %}
+                of your answers :
+            {% endif %}
+            </h3>
+            {% if answers|length == 0 %}
+                <h6>You havent made any submissions</h6>
+            {% endif %}
+            <div class="answers">
+                {% if user.is_student %}
+                
+                    {% for answer in answers %}
+                        <a href="{% url 'quiz_detail' answer.quiz.subject.slug answer.quiz.id %}">
+                        <div class="answer">
+                            <i class='bx bx-clipboard mr-2'></i>
+                            {{answer.quiz.title|title}}
+
+                            <div class="score">
+                                <h6>Score : 
+                                {% if answer.score %}
+                                    {{answer.score}}
+                                {% else %}
+                                    Not marked
+                                {% endif %}
+                                </h6>
+                            </div>
+                        </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    {% for quiz in quizzes %}
+                        <a href="{% url 'quiz_detail' quiz.subject.slug quiz.id %}">
+                        <div class="answer">
+                            <i class='bx bx-clipboard mr-2'></i>
+                            {{quiz.title|title}}
+
+                            <div class="score">
+                                <h6>Avg Score : 
+                                {% if quiz.avg_score %}
+                                    {{quiz.avg_score}}
+                                {% else %}
+                                    Not marked
+                                {% endif %}
+                                </h6>
+                            </div>
+                        </div>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+                
+        </div>
+    </div>
+{% endblock body_block %}
