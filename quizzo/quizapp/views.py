@@ -130,14 +130,13 @@ def create_subject(request):
 @login_required(login_url="login")
 def add_subject(request):
     user = request.user
+    subjects = getSubjects(user)
     if user.is_student:
         profile = user.student
         form = StudentSubjectUpdateForm(instance=profile)
-        subjects = user.student.subjects.all()
     else:
         profile = user.teacher
         form = TeacherSubjectUpdateForm(instance=profile)
-        subjects = user.teacher.subjects.all()
 
     if request.method == "POST":
         if user.is_student:
@@ -160,11 +159,9 @@ def show_subject(request, subject_slug):
     quizform = None
     subject = Subject.objects.get(slug=subject_slug)
     quizzes = Quiz.objects.filter(subject=subject).order_by("-created_time")
-    if user.is_student:
-        subjects = user.student.subjects.all()
-
+    subjects = getSubjects(user)
+    
     if user.is_teacher:
-        subjects = user.teacher.subjects.all()
         quizform = QuizForm()
 
     if subject not in subjects:
@@ -175,7 +172,8 @@ def show_subject(request, subject_slug):
         if quizform.is_valid():
             question_description = request.POST.get("description")
             # print(question_description)
-            if "question_file" not in request.FILES and question_description is None:
+            if "question_file" not in request.FILES and not len(question_description):
+                print("mistake")
                 messages.error(request, "Atlest provide either description or file")
                 context = {
                     "subject": subject,

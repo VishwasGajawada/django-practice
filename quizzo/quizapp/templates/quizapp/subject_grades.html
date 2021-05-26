@@ -52,8 +52,11 @@
                 of your answers :
             {% endif %}
             </h3>
-            {% if answers|length == 0 %}
+            {% if user.is_student and answers|length == 0 %}
                 <h6>You havent made any submissions</h6>
+            {% endif %}
+            {% if user.is_teacher and quizzes|length == 0 %}
+                <h6>No quizzes are made for {{subject.name|title}}</h6>
             {% endif %}
             <div class="answers">
                 {% if user.is_student %}
