@@ -3,6 +3,7 @@ djan2
 djan3
 quizzo/quizenv
 venv
+env
 
 .vscode
 __pycache__
