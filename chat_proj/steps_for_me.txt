@@ -1,0 +1,46 @@
+python -m venv venv
+
+.\venv\Scripts\activate
+
+pip install django..then channels
+
+make project,app
+
+add app anc 'channels' to settins.py
+
+since we installed channels..we have to setup asgi server
+ -> ASGI_APPLICATION = 'proj.routing.application' in settins.py
+
+
+make simple urls and views and template
+
+if we runserver now we get  
+ ->"django.core.exceptions.ImproperlyConfigured: Cannot import     ASGI_APPLICATION module 'proj.routing'"
+
+  //-> we have to setup routing..similar to url routing
+
+ ->creating routing.py inside proj
+    from channels.auth import AuthMiddlewareStack
+    from channels.routing import ProtocolTypeRouter,URLRouter
+    import chat.routing
+
+    application = ProtocolTypeRouter({
+        'websocket': AuthMiddlewareStack(
+            URLRouter(
+                chat.routing.websocket_urlpatterns
+            )
+        ),
+    })
+
+ ->create routing.py inside app also
+    from django.urls import re_path
+    from . import consumers
+    websocket_urlpatterns = [
+        re_path(r'ws/chat/(?P<room_name>\w+)/$',consumers.ChatRoomConsumer),
+        #for safety
+        # re_path(r'^ws/chat/(?P<room_name>[^/]+)/$',consumers.ChatRoomConsumer),
+    ]
+
+ ->consumers.py inside app
+ 
+
