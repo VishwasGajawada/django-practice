@@ -2,20 +2,22 @@
 {% extends 'blog_app/base.html' %}
 {% load static %}
 
+{% block css_block %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/blog_app/index.css' %}">
+{% endblock css_block %}
+
 {% block body_block %}
 
-<ul>
+<a class="btn btn-primary" href="{% url 'add_blog' %}"><h3>Add a new blog</h3></a>
+<div class="blog_list">
     {% for blog in blogs %}
-        <li>
-            <div>
-                <h1><a href="{% url 'blog_detail' blog.id %}">{{blog.title}}</a></h1>
+            <div class="blog">
+                <h1><a href="{% url 'blog_detail' blog.id %}">{{blog.title|title}}</a></h1>
                 <p>{{blog.description|safe|truncatechars:"200"}}</p>
                 Comments : {{blog.num_comments}}
             </div>
-        </li>
     {% endfor %}
-</ul>
-
-<a href="{% url 'add_blog' %}">Add a new blog</a>
+</div>
 
 {% endblock body_block %}

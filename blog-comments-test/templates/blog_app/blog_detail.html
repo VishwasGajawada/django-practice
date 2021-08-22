@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 {% extends 'blog_app/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
+
+{% block css_block %}
+    {{block.super}}
+    <link rel="stylesheet" href="{% static 'css/blog_app/form_container.css' %}">
+{% endblock css_block %}
 
 {% block body_block %}
-
-
 
 <div class="blog_posts">
     <div class="post">
@@ -16,7 +20,7 @@
             {% comment %} <div class="comment"><p>{{comment.path_id}} ::: {{comment.content}} </p></div> {% endcomment %}
             <div id="comment_{{comment.id}}" class="comment" style="margin-left: {{comment.level}}00px;border-left:2px solid black; padding: 10px" >
                 {% if comment.parent_comment %}
-                    <a href="./#comment_{{comment.parent_comment.id}}" >parent &#8593 </a>
+                    <a href="./#comment_{{comment.parent_comment.id}}" title="parent comment"><i class="fas fa-external-link-alt"></i></a>
                 {% endif %}
                 <p style="display: inline-block">{{comment.content}} </p>
                 <a href="{% url 'add_reply' pid=comment.post.id cid=comment.id %}">Add a reply</a>
@@ -24,11 +28,15 @@
         {% endfor %}
     </div>
 
+
+</div>
+
+<div class="form_container">
+    <div class="heading"><h3>Add a comment</h3></div>
     <form action="" method="post">
         {% csrf_token %}
-        {{comment_form.as_p}}
-        <button type="submit">Add comment</button>
+        {{comment_form|crispy}}
+        <button class="btn btn-primary" type="submit">Add comment</button>
     </form>
-
 </div>
 {% endblock body_block %}
