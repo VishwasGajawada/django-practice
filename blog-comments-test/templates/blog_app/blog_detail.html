@@ -6,6 +6,7 @@
 {% block css_block %}
     {{block.super}}
     <link rel="stylesheet" href="{% static 'css/blog_app/form_container.css' %}">
+    <link rel="stylesheet" href="{% static 'css/blog_app/highlight_comment.css' %}">
 {% endblock css_block %}
 
 {% block body_block %}
@@ -23,7 +24,7 @@
                     <a href="./#comment_{{comment.parent_comment.id}}" title="parent comment"><i class="fas fa-external-link-alt"></i></a>
                 {% endif %}
                 <p style="display: inline-block">{{comment.content}} </p>
-                <a href="{% url 'add_reply' pid=comment.post.id cid=comment.id %}">Add a reply</a>
+                <a class="btn btn-outline-primary" href="{% url 'add_reply' pid=comment.post.id cid=comment.id %}">Add a reply</a>
             </div>
         {% endfor %}
     </div>
