@@ -3,7 +3,10 @@
 {% load static %}
 
 {% block body_block %}
-<div class="blog_post">
+
+
+
+<div class="blog_posts">
     <div class="post">
         <h1>{{blog.title}}</h1>
         <p>{{blog.description}}</p>
@@ -11,13 +14,21 @@
         <hr>
         {% for comment in comments %}
             {% comment %} <div class="comment"><p>{{comment.path_id}} ::: {{comment.content}} </p></div> {% endcomment %}
-            <div id="comment_{{comment.id}}" class="comment" style="margin-left: {{comment.level}}00px" >
+            <div id="comment_{{comment.id}}" class="comment" style="margin-left: {{comment.level}}00px;border-left:2px solid black; padding: 10px" >
                 {% if comment.parent_comment %}
                     <a href="./#comment_{{comment.parent_comment.id}}" >parent &#8593 </a>
                 {% endif %}
                 <p style="display: inline-block">{{comment.content}} </p>
+                <a href="{% url 'add_reply' pid=comment.post.id cid=comment.id %}">Add a reply</a>
             </div>
         {% endfor %}
     </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        <button type="submit">Add comment</button>
+    </form>
+
 </div>
 {% endblock body_block %}

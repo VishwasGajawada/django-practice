@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends 'blog_app/base.html' %}
+{% load static %}
+
+{% block body_block %}
+
+<h1>{{blog.title}}</h1>
+
+<h3>Adding reply to : </h3>
+<p>{{parent_comment.content}}</p>
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    {{reply_form.as_p}}
+    <button type="submit">Add</button>
+</form>
+
+{% endblock body_block %}
