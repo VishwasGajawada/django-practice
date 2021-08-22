@@ -1,9 +1,0 @@
-div:target{
-    animation: highlight 1s;
-}
-
-@keyframes highlight {
-    50%  {
-        background-color:rgb(207, 230, 238);
-    }
-  }
