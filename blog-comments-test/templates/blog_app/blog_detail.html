@@ -15,6 +15,7 @@
     <div class="post">
         <h1>{{blog.title}}</h1>
         <p>{{blog.description|safe}}</p>
+        <a href="{% url 'edit_blog' pk=blog.id %}" class="btn btn-outline-warning">Edit</a>
 
         <hr>
         {% for comment in comments %}

@@ -19,3 +19,9 @@
         max-width:90%;
     }
 }
+
+.blog_content{
+    max-height: 150px;
+    margin: 15px auto;
+    overflow: hidden;
+}

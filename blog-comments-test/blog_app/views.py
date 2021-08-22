@@ -53,3 +53,18 @@ def add_reply(request,pid,cid):
 
     context = {'parent_comment': parent_comment,'reply_form':reply_form, 'blog':blog}
     return render(request, 'blog_app/add_reply.html',context=context)
+
+def edit_blog(request, pk):
+    blog = Blog.objects.get(id=pk)
+    form = BlogForm(instance=blog)
+
+    if request.method == 'POST':
+        form = BlogForm(request.POST,instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {'form': form,'blog':blog}
+    return render(request, 'blog_app/edit_blog.html', context=context)
+
+        

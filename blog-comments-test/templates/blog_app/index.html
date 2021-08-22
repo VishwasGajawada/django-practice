@@ -14,8 +14,12 @@
     {% for blog in blogs %}
             <div class="blog">
                 <h1><a href="{% url 'blog_detail' blog.id %}">{{blog.title|title}}</a></h1>
-                <p>{{blog.description|safe|truncatechars:"200"}}</p>
-                Comments : {{blog.num_comments}}
+                <div class="blog_content">
+                    <p>{{blog.description|safe}}</p>
+                </div>
+                <a class="btn btn-secondary btn-sm" href="{% url 'blog_detail' blog.id %}">
+                <i class='bx bx-comment'></i>{{blog.num_comments}} comments
+                </a>
             </div>
     {% endfor %}
 </div>

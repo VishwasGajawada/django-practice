@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends 'blog_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block css_block %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/blog_app/form_container.css' %}">
+{% endblock css_block %}
+
+{% block body_block %}
+
+<div class="form_container">
+    <div class="heading">
+        <h3>Edit Blog</h3>
+    </div>
+
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.media}}
+        {{form|crispy}}
+        <button class="btn btn-primary">Submit changes</button>
+    </form>
+
+</div>
+
+{% endblock body_block %}
