@@ -15,7 +15,7 @@
             <div class="blog">
                 <h1><a href="{% url 'blog_detail' blog.id %}">{{blog.title|title}}</a></h1>
                 <div class="blog_content">
-                    <p>{{blog.description|safe}}</p>
+                    {{blog.description|safe}}
                 </div>
                 <a class="btn btn-secondary btn-sm" href="{% url 'blog_detail' blog.id %}">
                 <i class='bx bx-comment'></i>{{blog.num_comments}} comments
