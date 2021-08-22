@@ -13,11 +13,11 @@
     <link rel="stylesheet" href="{% static 'css/blog_app/index.css' %}">
 </head>
 <body>
-    {% comment %} <div class="nav">
+    <div class="my-nav">
         {% include 'blog_app/navbar.html' %}
-    </div> {% endcomment %}
+    </div>
 
-    <div class="container">
+    <div class="container"  style="margin:30px">
         {% block body_block %}{% endblock body_block %}
     </div>
 

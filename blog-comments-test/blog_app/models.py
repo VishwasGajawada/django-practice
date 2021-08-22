@@ -1,9 +1,11 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class Blog(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True,null=True)
+    # description = models.TextField(blank=True,null=True)
+    description = RichTextField(blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)
     num_comments = models.IntegerField(default=0, null=True, blank=True)
 
